@@ -58,4 +58,42 @@ public class Board {
         System.out.println();
         System.out.println();
     }
+
+    public boolean makeMove(int column, char token){
+        column--;
+        if(column < 0||column > (board[0].length)){
+            System.out.println("Movimiento inválido");
+            return false;
+        }
+
+        if(board[0][column]!=' '){
+            System.out.println("La columna está llena");
+            return false;
+        }
+
+        board[0][column] = token;
+        boolean placed = false;
+
+        for(int i = 0; i < board.length - 1; i++){
+            if(board[i + 1][column]==' '){
+                Utilities.clearScreen();
+                printBoard();
+                Utilities.sleep(1000);
+                board[i][column] = ' ';
+                board[i + 1][column] = token;
+            } else {
+                placed = true;
+                break;
+            }
+        }
+        
+        if(!placed){
+            board[board.length - 2][column] = ' ';
+            board[board.length - 1][column] = token;
+        }
+
+
+
+        return true;
+    }
 }

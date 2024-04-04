@@ -6,10 +6,10 @@ public class Game {
     
     public void start(){
         System.out.println("Ingresa el número de filas: ");
-        int rows = utilities.validateNumberBoard();  
+        int rows = Utilities.validateNumberBoard();  
         
         System.out.println("Ingresa el número de columnas: ");
-        int columns = utilities.validateNumberBoard();
+        int columns = Utilities.validateNumberBoard();
 
         board = new Board(rows, columns);
 
@@ -17,11 +17,11 @@ public class Game {
             System.out.println("¿Qué modalidad desea jugar?");
             System.out.println("1) Jugador contra jugador");
             System.out.println("2) Jugador contra IA");
-            int opt = utilities.validateNumber();
+            int opt = Utilities.validateNumber();
 
             switch (opt) {
                 case 1: // Jugador contra Jugador
-                    jugadorContraJugador();
+                    PlayerVsPlayer();
                     break;
                 case 2: // Jugador contra máquina
 
@@ -32,37 +32,46 @@ public class Game {
         } while (true);
     }
 
-    private Jugador crearJugador(int numJugador){
+    private Player createPlayer(int numPlayer){
         System.out.println("Ingresa el nombre del jugador: ");
-        String nombre = utilities.validateString();
+        String nombre = Utilities.validateString();
 
-        return new Jugador(nombre, ((numJugador == 1) ? '1' : '2'), ((numJugador == 1)) ? true : false);
+        return new Player(nombre, ((numPlayer == 1) ? '1' : '2'), ((numPlayer == 1)) ? true : false);
     }
 
-    private void jugadorContraJugador(){
-        Jugador jugadorUno = crearJugador(1);
-        Jugador jugadorDos = crearJugador(2);
+    private void swipeTurns(Player one, Player two){
+        if(one.getIsTurn()){
+            one.setIsTurn(false);
+            two.setIsTurn(true);
+        } else {
+            two.setIsTurn(false);
+            one.setIsTurn(true);
+        }
+    }
+
+    private void PlayerVsPlayer(){
+        Player playerOne = createPlayer(1);
+        Player playerTwo = createPlayer(2);
 
         do {
-            // Impresión del teclado
+            // Clear screen
+            Utilities.clearScreen();
+            
+            // Print board
             board.printBoard();
 
-            // Turno actual
-            Jugador jugadorEnTurno = ((jugadorUno.isIsTurn()) ? jugadorUno : jugadorDos);
+            // Who's in turn? 
+            Player playerToMove = ((playerOne.isIsTurn()) ? playerOne : playerTwo);
             
-            System.out.println("Ingresa la columna de " + jugadorEnTurno.getNombre() + ": ");
-            int play = utilities.validateNumber();
+            // What move?
+            System.out.println("Ingresa la columna de " + playerToMove.getName() + ": ");
+            int play = Utilities.validateNumber();
 
-            makeMove(play);
+            // Make play
+            if(board.makeMove(play, playerToMove.getToken()))
+                swipeTurns(playerOne, playerTwo);
         } while (true);
     }
 
-    private void makeMove(int column){
-        if(column < (board.getColumns() + 1)||column > (board.getColumns()+1)){
-            System.out.println("Movimiento inválido");
-            System.out.println("Column: " + column);
-            System.out.println("board.getCo: " + board.getColumns()+1);
-            return;
-        }
-    }
+
 }

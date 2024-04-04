@@ -1,12 +1,12 @@
 package connect4;
 
-public class Jugador {
-    private final String nombre;
+public class Player {
+    private final String name;
     private final char token;
     private boolean isTurn;
 
-    public String getNombre() {
-        return this.nombre;
+    public String getName() {
+        return this.name;
     }
 
     public char getToken() {
@@ -25,8 +25,8 @@ public class Jugador {
         this.isTurn = isTurn;
     }
 
-    public Jugador(String nombre, char token, boolean turn){
-        this.nombre = nombre;
+    public Player(String nombre, char token, boolean turn){
+        this.name = nombre;
         this.token = token;
         this.isTurn = turn;
     }

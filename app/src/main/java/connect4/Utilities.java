@@ -2,7 +2,7 @@ package connect4;
 
 import java.util.Scanner;
 
-public class utilities {
+public class Utilities {
     private static final Scanner in = new Scanner(System.in);
 
     public static int validateNumberBoard(){
@@ -54,4 +54,9 @@ public class utilities {
             Thread.sleep(miliseconds); 
         } catch (Exception e) {}
     }
+
+    public static void clearScreen() {  
+        System.out.print("\033[H\033[2J");  
+        System.out.flush();  
+    }  
 }
