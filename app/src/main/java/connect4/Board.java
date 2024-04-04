@@ -59,6 +59,14 @@ public class Board {
         System.out.println();
     }
 
+    /**
+     * Function that makes a move, it also validates
+     * if the move is in the grid
+     * 
+     * @param column
+     * @param token
+     * @return boolean
+      */
     public boolean makeMove(int column, char token){
         column--;
         if(column < 0||column > (board[0].length)){
@@ -92,8 +100,18 @@ public class Board {
             board[board.length - 1][column] = token;
         }
 
-
-
         return true;
+    } 
+
+    public boolean validateWin(int counter, int token, int dirX, int dirY, int posX, int posY){
+        if(counter==4) return true;
+
+        if((dirX<board[0].length&&dirY<board.length&&dirX>=0&&dirY>=0))
+            if(board[dirX][dirY]==token)
+                return validateWin(counter + 1, token, dirX, dirY, posX, posY);
+            else return false;
+
+        return false;
     }
 }
+

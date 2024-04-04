@@ -67,9 +67,11 @@ public class Game {
             System.out.println("Ingresa la columna de " + playerToMove.getName() + ": ");
             int play = Utilities.validateNumber();
 
+            
             // Make play
-            if(board.makeMove(play, playerToMove.getToken()))
+            if(board.makeMove(play, playerToMove.getToken())){
                 swipeTurns(playerOne, playerTwo);
+            }
         } while (true);
     }
 
