@@ -33,4 +33,25 @@ public class utilities {
         return number;
     }
 
+    public static String validateString(){
+        String string;
+        do {
+            try {
+                string = in.nextLine();
+
+                if(string.isEmpty())
+                    System.out.println("No puedes dejar un string vacío");
+                else break;
+            } catch (Exception e) {
+                System.out.println("Ingresa un String válido");
+            }
+        } while (true);
+        return string;
+    }
+
+    public static void sleep(int miliseconds){
+        try {
+            Thread.sleep(miliseconds); 
+        } catch (Exception e) {}
+    }
 }

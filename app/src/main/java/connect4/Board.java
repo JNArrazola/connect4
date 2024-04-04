@@ -9,6 +9,14 @@ public class Board {
         fillBoard();
     }
 
+    public int getNumRows(){
+        return board.length;
+    }
+
+    public int getColumns(){
+        return board[0].length;
+    }
+
     /**
      * Function that fills the board with ' ' chars
       */
