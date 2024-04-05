@@ -6,7 +6,7 @@ public class Board {
     // constructor
     Board(int x, int y){
         board = new char[x][y];
-        fillBoard();
+        resetBoard();
     }
 
     public int getNumRows(){
@@ -20,7 +20,7 @@ public class Board {
     /**
      * Function that fills the board with ' ' chars
       */
-    private void fillBoard(){
+    public void resetBoard(){
         for(int i = 0; i < board.length; i++)
             for(int j = 0; j < board[0].length; j++)
                 board[i][j] = ' ';
@@ -43,12 +43,13 @@ public class Board {
                 else 
                     System.out.print(board[i][j] + "|");
             System.out.println();
-        }
+            for(int j = 0; j < board[0].length*(2) + 1; j++)
+                System.out.print("-");
 
-        for(int i = 0; i < board[0].length*(2) + 1; i++)
-            System.out.print("-");
-        System.out.println();
+            System.out.println();
+        }
         
+        System.out.println();
         for (int i = 0; i < board[0].length; i++)
             if(i==0)
                 System.out.print("|" + (i+1) + "|");
@@ -69,7 +70,7 @@ public class Board {
       */
     public boolean makeMove(int column, char token){
         column--;
-        if(column < 0||column > (board[0].length)){
+        if(column < 0||column >= (board[0].length)){
             System.out.println("Movimiento inválido");
             return false;
         }
@@ -86,7 +87,7 @@ public class Board {
             if(board[i + 1][column]==' '){
                 Utilities.clearScreen();
                 printBoard();
-                Utilities.sleep(1000);
+                // Utilities.sleep(500);
                 board[i][column] = ' ';
                 board[i + 1][column] = token;
             } else {
@@ -103,14 +104,46 @@ public class Board {
         return true;
     } 
 
-    public boolean validateWin(int counter, int token, int dirX, int dirY, int posX, int posY){
-        if(counter==4) return true;
+    /**
+     * Functions that checks if a player won
+     * @param token
+     * @return boolean
+      */
+    public boolean checkWin(char token){
+        for(int i = 0; i < board.length; i++){
+            for(int j = 0; j < board[0].length; j++){
+                if(board[i][j]==token)
+                    if(validateWin(0, token, i, j, 0, 1)
+                    ||validateWin(0, token, i, j, 1, 0)
+                    ||validateWin(0, token, i, j, -1, 1)
+                    ||validateWin(0, token, i, j, 1, 1))
+                        return true;
+            }
+        }
+        return false;
+    }
 
-        if((dirX<board[0].length&&dirY<board.length&&dirX>=0&&dirY>=0))
-            if(board[dirX][dirY]==token)
-                return validateWin(counter + 1, token, dirX, dirY, posX, posY);
-            else return false;
-
+    /**
+     * Recursive function that validates if there is a winner combination on board
+     * @param counter
+     * @param token
+     * @param posFila
+     * @param posColumna
+     * @param dirFila
+     * @param dirColumna
+     * @return boolean
+     * 
+     * @author Joshua Arrazola
+      */
+    private boolean validateWin(int counter, char token, int posFila, int posColumna, int dirFila, int dirColumna){
+        if(counter==4)
+            return true;
+        
+            if(posFila<board.length&&posColumna<board[0].length&&posFila>=0&&posColumna>=0)
+                if(board[posFila][posColumna]==token)
+                    return validateWin(counter + 1, token, posFila + dirFila, posColumna + dirColumna, dirFila, dirColumna);
+                else 
+                    return false;
         return false;
     }
 }

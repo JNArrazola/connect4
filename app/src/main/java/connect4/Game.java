@@ -50,9 +50,12 @@ public class Game {
     }
 
     private void PlayerVsPlayer(){
+        board.resetBoard();
+        
         Player playerOne = createPlayer(1);
         Player playerTwo = createPlayer(2);
-
+        
+        Player winner = null;
         do {
             // Clear screen
             Utilities.clearScreen();
@@ -64,15 +67,26 @@ public class Game {
             Player playerToMove = ((playerOne.isIsTurn()) ? playerOne : playerTwo);
             
             // What move?
-            System.out.println("Ingresa la columna de " + playerToMove.getName() + ": ");
+            System.out.println("Ingresa la columna de " + playerToMove.getName() + "(" + playerToMove.getToken()+ "): ");
             int play = Utilities.validateNumber();
-
             
-            // Make play
+            // Make play and validate if there is a winner
             if(board.makeMove(play, playerToMove.getToken())){
+                if(board.checkWin(playerToMove.getToken())){
+                    Utilities.clearScreen();
+                    winner = playerToMove;
+                    break;
+                }
+
                 swipeTurns(playerOne, playerTwo);
-            }
+            } 
         } while (true);
+
+        Utilities.clearScreen();
+        board.printBoard();
+        System.out.println("¡Gana el jugador: " + winner.getName() + "(" + winner.getToken() + ")!");
+        System.out.println();
+        System.out.println();
     }
 
 
