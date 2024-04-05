@@ -18,7 +18,7 @@ public class Board {
     }
 
     /**
-     * Function that fills the board with ' ' chars
+     * Function that fills the board with empty chars
       */
     public void resetBoard(){
         for(int i = 0; i < board.length; i++)
@@ -70,15 +70,11 @@ public class Board {
       */
     public boolean makeMove(int column, char token){
         column--;
-        if(column < 0||column >= (board[0].length)){
-            System.out.println("Movimiento inválido");
+        
+        if(column < 0||column >= (board[0].length))
             return false;
-        }
-
-        if(board[0][column]!=' '){
-            System.out.println("La columna está llena");
+        if(board[0][column]!=' ')
             return false;
-        }
 
         board[0][column] = token;
         boolean placed = false;
@@ -87,7 +83,7 @@ public class Board {
             if(board[i + 1][column]==' '){
                 Utilities.clearScreen();
                 printBoard();
-                // Utilities.sleep(500);
+                Utilities.sleep(500);
                 board[i][column] = ' ';
                 board[i + 1][column] = token;
             } else {
@@ -105,7 +101,7 @@ public class Board {
     } 
 
     /**
-     * Functions that checks if a player won
+     * Function that iterates through the board to see if there is a winner
      * @param token
      * @return boolean
       */
@@ -139,11 +135,11 @@ public class Board {
         if(counter==4)
             return true;
         
-            if(posFila<board.length&&posColumna<board[0].length&&posFila>=0&&posColumna>=0)
-                if(board[posFila][posColumna]==token)
-                    return validateWin(counter + 1, token, posFila + dirFila, posColumna + dirColumna, dirFila, dirColumna);
-                else 
-                    return false;
+        if(posFila<board.length&&posColumna<board[0].length&&posFila>=0&&posColumna>=0)
+            if(board[posFila][posColumna]==token)
+                return validateWin(counter + 1, token, posFila + dirFila, posColumna + dirColumna, dirFila, dirColumna);
+            else 
+                return false;
         return false;
     }
 }

@@ -69,7 +69,7 @@ public class Game {
             // What move?
             System.out.println("Ingresa la columna de " + playerToMove.getName() + "(" + playerToMove.getToken()+ "): ");
             int play = Utilities.validateNumber();
-            
+
             // Make play and validate if there is a winner
             if(board.makeMove(play, playerToMove.getToken())){
                 if(board.checkWin(playerToMove.getToken())){
@@ -78,6 +78,7 @@ public class Game {
                     break;
                 }
 
+                // Swipe turns of players
                 swipeTurns(playerOne, playerTwo);
             } 
         } while (true);
