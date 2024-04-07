@@ -151,11 +151,11 @@ public class Board {
     /**
      * Function that calculates the best possible play
      * @param tokenPlayer
-     * @param tokenRival
+     * @param tokenPc
      * 
      * @author Joshua Arrazola
       */
-    public void PcMove(char tokenPlayer, char tokenRival) {
+    public void PcMove(char tokenPlayer, char tokenPc) {
         int[] maxCounter = new int[1];
         maxCounter[0] = 0;
 
@@ -177,13 +177,45 @@ public class Board {
                     DFS_Algorithm(maxCounter, 0, tokenPlayer, i, j, 1, -1, coords);
                 }
             }
+        }   
+
+        /**
+         * Search if there is an absolute win for computer
+          */
+        Pair winnerPair = null;
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (board[i][j] == tokenPlayer) {
+                    winnerPair = ((winnerPair!=null) ? aux(winnerPair) : DFS_searchForWin(0, tokenPc, i, j, 0, 1));
+                    winnerPair = ((winnerPair!=null) ? aux(winnerPair) : DFS_searchForWin(0, tokenPc, i, j, 0, -1));
+                    winnerPair = ((winnerPair!=null) ? aux(winnerPair) : DFS_searchForWin(0, tokenPc, i, j, -1, 0));
+                    winnerPair = ((winnerPair!=null) ? aux(winnerPair) : DFS_searchForWin(0, tokenPc, i, j, -1, -1));
+                    winnerPair = ((winnerPair!=null) ? aux(winnerPair) : DFS_searchForWin(0, tokenPc, i, j, 1, 1));
+                    winnerPair = ((winnerPair!=null) ? aux(winnerPair) : DFS_searchForWin(0, tokenPc, i, j, 1, -1));
+                }
+            }
         }
 
+        if(winnerPair!=null){
+            board[winnerPair.getCoordX()][winnerPair.getCoordY()] = tokenPc;
+            return;
+        }
+
+        // didn't find any play
         if(coords[0]==-1||coords[1]==-1)
             selectRandom(coords);
         
 
-        board[coords[0]][coords[1]] = tokenRival;
+        board[coords[0]][coords[1]] = tokenPc;
+    }
+
+    /**
+     * Function just for the ternary operator to work
+     * @param pair
+     * @return
+      */
+    private Pair aux(Pair pair){
+        return pair;
     }
 
     private Pair selectRandom(int[] coords){
@@ -240,16 +272,15 @@ public class Board {
                     maxCounter[0] = counter;
                     coords[0] = posFila;
                     coords[1] = posColumna;
-                    System.out.println("Fila: " + dirFila + " Columna: " + dirColumna + "Contador: " + counter);
                 } else return;
             }
         } else return;
     }
 
-    private Pair DFS_searchForWin(int localCounter, char token, int posFila, int posColumna, int dirFila, int dirColumna, int[] coords){
+    private Pair DFS_searchForWin(int localCounter, char token, int posFila, int posColumna, int dirFila, int dirColumna){
         if (isInBoard(posFila, posColumna)){
             if(board[posFila][posColumna]==token){
-                return DFS_searchForWin(localCounter + 1, token, posFila + dirFila, posColumna + dirColumna, dirFila, dirColumna, coords);
+                return DFS_searchForWin(localCounter + 1, token, posFila + dirFila, posColumna + dirColumna, dirFila, dirColumna);
             } else {
                 if((localCounter==3)&&
                 existSupportCell(posFila, posColumna, dirFila, dirColumna)&&

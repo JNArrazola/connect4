@@ -38,7 +38,10 @@ public class Game {
             System.out.println("Hay una partida pendiente, ¿desea reanudarla? (y/n): ");
             String answ = Utilities.validateString();
             if(answ.toLowerCase().equals("y")){
-                PlayerVsPlayer();
+                if(save.getPlayerTwo().getIsPc())
+                    PlayerVSPc();
+                else 
+                    PlayerVsPlayer();
             } else {
                 save = null;
                 FileManagement.save(save);
@@ -51,7 +54,7 @@ public class Game {
         System.out.println("Ingresa el nombre del jugador: ");
         String nombre = Utilities.validateString();
 
-        return new Player(nombre, ((numPlayer == 1) ? 'X' : 'O'), ((numPlayer == 1)) ? true : false);
+        return new Player(nombre, ((numPlayer == 1) ? 'X' : 'O'), ((numPlayer == 1)) ? true : false, false);
     }
 
     /**
@@ -104,7 +107,7 @@ public class Game {
             int play = Utilities.validateNumber();
 
             if(play==-1){
-                FileManagement.save(new Save(playerOne, playerTwo, board));
+                FileManagement.save(new Save(playerOne, playerTwo, board, "PlayerVsPlayer"));
                 System.exit(0);
             }
 
@@ -130,13 +133,23 @@ public class Game {
         FileManagement.save(save);
     }
 
-
-
     void PlayerVSPc(){
-        Player playerOne = createPlayer(1);
-        Player playerTwo = new Player("PC", 'O', false);
-        board = new Board();
-        board.resetBoard();
+        Player playerOne;
+        Player playerTwo; 
+
+        /**
+         * We get info if there is a saved game
+          */
+        if(save==null){
+            playerOne = createPlayer(1);
+            playerTwo = new Player("PC", 'O', false, true);
+            board = new Board();
+            board.resetBoard();
+        } else {
+            playerOne = save.getPlayerOne();
+            playerTwo = save.getPlayerTwo();
+            board = save.getBoard();
+        }
 
         Player winner = null;
         char tokenJugador = playerOne.getToken();
@@ -151,12 +164,12 @@ public class Game {
             Player playerToMove = ((playerOne.isIsTurn()) ? playerOne : playerTwo);
             
 
-            if(playerToMove.getName()!="PC"){
+            if(!playerToMove.getIsPc()){
                 System.out.println("Ingresa la columna de " + playerToMove.getName() + "(" + playerToMove.getToken()+ ")[Ingresa -1 para guardar partida]: ");
                 int play = Utilities.validateNumber();    
 
                 if(play==-1){
-                    FileManagement.save(new Save(playerOne, playerTwo, board));
+                    FileManagement.save(new Save(playerOne, playerTwo, board, "PlayerVsPc"));
                     System.exit(0);
                 }
     

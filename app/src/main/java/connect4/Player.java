@@ -4,6 +4,7 @@ public class Player {
     private final String name;
     private final char token;
     private boolean isTurn;
+    private final boolean isPc;
 
     public String getName() {
         return this.name;
@@ -25,9 +26,14 @@ public class Player {
         this.isTurn = isTurn;
     }
 
-    public Player(String nombre, char token, boolean turn){
+    public boolean getIsPc() {
+        return isPc;
+    }
+
+    public Player(String nombre, char token, boolean turn, boolean isPc){
         this.name = nombre;
         this.token = token;
         this.isTurn = turn;
+        this.isPc = isPc;
     }
 }

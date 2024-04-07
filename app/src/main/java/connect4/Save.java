@@ -6,11 +6,13 @@ public class Save implements Serializable {
     private final Player playerOne;
     private final Player playerTwo;
     private final Board board;
+    private final String gamemode;
 
-    Save(Player playerOne, Player playerTwo, Board board){
+    Save(Player playerOne, Player playerTwo, Board board, String gamemode){
         this.playerOne = playerOne;
         this.playerTwo = playerTwo;
         this.board = board;
+        this.gamemode = gamemode;
     }
 
     public Board getBoard() {
@@ -23,5 +25,9 @@ public class Save implements Serializable {
 
     public Player getPlayerTwo() {
         return playerTwo;
+    }
+
+    public String getGamemode() {
+        return gamemode;
     }
 }
