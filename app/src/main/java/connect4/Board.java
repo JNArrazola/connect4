@@ -4,8 +4,8 @@ public class Board {
     private char[][] board = null;
 
     // constructor
-    Board(int x, int y){
-        board = new char[x][y];
+    Board(){
+        board = new char[6][7];
         resetBoard();
     }
 
