@@ -186,12 +186,12 @@ public class Board {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[0].length; j++) {
                 if (board[i][j] == tokenPlayer) {
-                    winnerPair = ((winnerPair!=null) ? aux(winnerPair) : DFS_searchForWin(0, tokenPc, i, j, 0, 1));
-                    winnerPair = ((winnerPair!=null) ? aux(winnerPair) : DFS_searchForWin(0, tokenPc, i, j, 0, -1));
-                    winnerPair = ((winnerPair!=null) ? aux(winnerPair) : DFS_searchForWin(0, tokenPc, i, j, -1, 0));
-                    winnerPair = ((winnerPair!=null) ? aux(winnerPair) : DFS_searchForWin(0, tokenPc, i, j, -1, -1));
-                    winnerPair = ((winnerPair!=null) ? aux(winnerPair) : DFS_searchForWin(0, tokenPc, i, j, 1, 1));
-                    winnerPair = ((winnerPair!=null) ? aux(winnerPair) : DFS_searchForWin(0, tokenPc, i, j, 1, -1));
+                    winnerPair =  DFS_searchForWin(0, tokenPc, i, j, 0, 1);
+                    winnerPair =  DFS_searchForWin(0, tokenPc, i, j, 0, -1);
+                    winnerPair =  DFS_searchForWin(0, tokenPc, i, j, -1, 0);
+                    winnerPair =  DFS_searchForWin(0, tokenPc, i, j, -1, -1);
+                    winnerPair =  DFS_searchForWin(0, tokenPc, i, j, 1, 1);
+                    winnerPair =  DFS_searchForWin(0, tokenPc, i, j, 1, -1);
                 }
             }
         }
@@ -209,15 +209,6 @@ public class Board {
         board[coords[0]][coords[1]] = tokenPc;
     }
 
-    /**
-     * Function just for the ternary operator to work
-     * @param pair
-     * @return
-      */
-    private Pair aux(Pair pair){
-        return pair;
-    }
-
     private Pair selectRandom(int[] coords){
         ArrayList<Pair> options = new ArrayList<>();
 
@@ -231,7 +222,7 @@ public class Board {
                         options.add(new Pair(i, j));
 
         Random random = new Random();
-        return options.get(random.nextInt(options.size()));
+        return options.get(random.nextInt(options.size() - 1));
     }
 
     private boolean isInBoard(int posFila, int posColumna){

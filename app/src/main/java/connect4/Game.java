@@ -23,6 +23,9 @@ public class Game {
                 case 2: // Jugador contra máquina
                     PlayerVSPc();
                     break;
+                case 3 : // Mejores puntajes
+
+                    break;
                 default:
                     break;
             }
