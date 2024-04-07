@@ -21,7 +21,7 @@ public class Game {
                     PlayerVsPlayer();
                     break;
                 case 2: // Jugador contra máquina
-
+                    PlayerVSPc();
                     break;
                 default:
                     break;
@@ -115,7 +115,7 @@ public class Game {
                     winner = playerToMove;
                     break;
                 }
-
+            
                 // Swipe turns of players
                 swipeTurns(playerOne, playerTwo);
             } 
@@ -131,4 +131,61 @@ public class Game {
     }
 
 
+
+    void PlayerVSPc(){
+        Player playerOne = createPlayer(1);
+        Player playerTwo = new Player("PC", 'O', false);
+        board = new Board();
+        board.resetBoard();
+
+        Player winner = null;
+        char tokenJugador = playerOne.getToken();
+        do {
+            // Clear screen
+            // Utilities.clearScreen();
+
+            // Print board
+            board.printBoard();
+
+            // Who's in turn?
+            Player playerToMove = ((playerOne.isIsTurn()) ? playerOne : playerTwo);
+            
+
+            if(playerToMove.getName()!="PC"){
+                System.out.println("Ingresa la columna de " + playerToMove.getName() + "(" + playerToMove.getToken()+ ")[Ingresa -1 para guardar partida]: ");
+                int play = Utilities.validateNumber();    
+
+                if(play==-1){
+                    FileManagement.save(new Save(playerOne, playerTwo, board));
+                    System.exit(0);
+                }
+    
+                if(board.makeMove(play, playerToMove.getToken())){
+                    if(board.checkWin(playerToMove.getToken())){
+                        Utilities.clearScreen();
+                        winner = playerToMove;
+                        break;
+                    }
+
+                    swipeTurns(playerOne, playerTwo);
+                } 
+            } else {
+                board.PcMove(tokenJugador, playerTwo.getToken()); 
+                swipeTurns(playerOne, playerTwo);
+                if(board.checkWin(playerToMove.getToken())){
+                    Utilities.clearScreen();
+                    winner = playerToMove;
+                    break;
+                }
+            }
+            
+        } while (true);
+            Utilities.clearScreen();
+            board.printBoard();
+            System.out.println("¡Gana el jugador: " + winner.getName() + "(" + winner.getToken() + ")!");
+            System.out.println();
+            System.out.println();
+            save = null;
+            FileManagement.save(save);
+    }
 }
