@@ -1,6 +1,7 @@
 package connect4;
 
-import org.checkerframework.checker.units.qual.s;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class Board {
     private char[][] board = null;
@@ -147,6 +148,13 @@ public class Board {
         return false;
     }
 
+    /**
+     * Function that calculates the best possible play
+     * @param tokenPlayer
+     * @param tokenRival
+     * 
+     * @author Joshua Arrazola
+      */
     public void PcMove(char tokenPlayer, char tokenRival) {
         int[] maxCounter = new int[1];
         maxCounter[0] = 0;
@@ -155,19 +163,43 @@ public class Board {
         coords[0] = -1;
         coords[1] = -1;
 
+        /**
+         * Search for best moves
+          */
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[0].length; j++) {
                 if (board[i][j] == tokenPlayer) {
-                    DFS_Algorithm(maxCounter, 0, tokenPlayer, i, j, 0, -1, coords);
                     DFS_Algorithm(maxCounter, 0, tokenPlayer, i, j, 0, 1, coords);
-                    DFS_Algorithm(maxCounter, 0, tokenPlayer, i, j, 1, -1, coords);
+                    DFS_Algorithm(maxCounter, 0, tokenPlayer, i, j, 0, -1, coords);
                     DFS_Algorithm(maxCounter, 0, tokenPlayer, i, j, -1, 0, coords);
                     DFS_Algorithm(maxCounter, 0, tokenPlayer, i, j, -1, -1, coords);
+                    DFS_Algorithm(maxCounter, 0, tokenPlayer, i, j, 1, 1, coords);
+                    DFS_Algorithm(maxCounter, 0, tokenPlayer, i, j, 1, -1, coords);
                 }
             }
         }
 
+        if(coords[0]==-1||coords[1]==-1)
+            selectRandom(coords);
+        
+
         board[coords[0]][coords[1]] = tokenRival;
+    }
+
+    private Pair selectRandom(int[] coords){
+        ArrayList<Pair> options = new ArrayList<>();
+
+        for(int i = 0; i < board.length; i++)
+            for(int j = 0; j < board[0].length; j++)
+                if(i!=0)
+                    if(board[i - 1][j]!=' '&&board[i][j]==' ')
+                        options.add(new Pair(i, j));
+                else 
+                    if(board[i][j]==' ')
+                        options.add(new Pair(i, j));
+
+        Random random = new Random();
+        return options.get(random.nextInt(options.size()));
     }
 
     private boolean isInBoard(int posFila, int posColumna){
@@ -175,23 +207,27 @@ public class Board {
     }
 
     private boolean existSupportCell(int posFila, int posColumna, int dirFila, int dirColumna){
-        if(dirFila==-1&&dirColumna==-1){
-            return isInBoard(posFila, posColumna + 1)&&
-            board[posFila][posColumna + 1]!=' ';
-        } else if(dirFila==1&&dirColumna==-1){
-            return isInBoard(posFila, posColumna + 1)&&
-            board[posFila][posColumna + 1]!=' ';
-        } else if(dirFila==-1&&dirColumna==0){
+        if(dirFila==-1&&dirColumna==-1){ // diagonal hacia arriba (izquierda)[abajo, arriba]
+            return isInBoard(posFila + 1, posColumna + 1)&&
+            board[posFila + 1][posColumna]!=' ';
+        } else if(dirFila==1&&dirColumna==-1){ // diagonal hacia arriba (derecha)
+            return isInBoard(posFila + 1, posColumna)&&
+            board[posFila + 1][posColumna]!=' ';
+        } else if(dirFila==-1&&dirColumna==0){ // vertical hacia arriba
             return isInBoard(posFila - 1, posColumna);
-        } else if(dirFila==0&&dirColumna==1){
-            return ((isInBoard(posFila + 1, posColumna + 1) && board[posFila + 1][posColumna + 1] != ' ')
-            || ((posFila == board.length - 1) && isInBoard(posFila, posColumna + 1) && board[posFila][posColumna + 1] == ' '));
-        } else if(dirFila==0&&dirColumna==-1){
-            return ((isInBoard(posFila - 1, posColumna + 1) && board[posFila - 1][posColumna + 1] != ' ')
+        } else if(dirFila==0&&dirColumna==1){ // horizontal hacia derecha
+            return ((isInBoard(posFila + 1, posColumna) && board[posFila + 1][posColumna] != ' ')
+            || ((posFila == board.length - 1) && isInBoard(posFila, posColumna) && board[posFila][posColumna] == ' '));
+        } else if(dirFila==0&&dirColumna==-1){ // horizontal hacia izquierda
+            return ((isInBoard(posFila + 1, posColumna) && board[posFila + 1][posColumna] != ' ')
             || ((posFila == board.length - 1) && isInBoard(posFila, posColumna - 1) && board[posFila][posColumna - 1] == ' '));
+        } else if(dirFila==1&&dirColumna==1){ // diagonal hacia arriba (izquierda, derecha)
+            return (isInBoard(posFila, posColumna + 1)&&board[posFila][posColumna + 1]!=' ')||
+            ((posFila==board.length-1)&&board[posFila][posColumna]==' ');
         }
         return false;
     }
+
 
     private void DFS_Algorithm(int[] maxCounter, int counter, char token, int posFila, int posColumna, int dirFila, int dirColumna, int[] coords){
         if (isInBoard(posFila, posColumna)){
@@ -201,11 +237,26 @@ public class Board {
                 if((maxCounter[0] < counter)&&
                 existSupportCell(posFila, posColumna, dirFila, dirColumna)&&
                 board[posFila][posColumna]==' '){
+                    maxCounter[0] = counter;
                     coords[0] = posFila;
                     coords[1] = posColumna;
-                    maxCounter[0] = counter;
+                    System.out.println("Fila: " + dirFila + " Columna: " + dirColumna + "Contador: " + counter);
                 } else return;
             }
         } else return;
+    }
+
+    private Pair DFS_searchForWin(int localCounter, char token, int posFila, int posColumna, int dirFila, int dirColumna, int[] coords){
+        if (isInBoard(posFila, posColumna)){
+            if(board[posFila][posColumna]==token){
+                return DFS_searchForWin(localCounter + 1, token, posFila + dirFila, posColumna + dirColumna, dirFila, dirColumna, coords);
+            } else {
+                if((localCounter==3)&&
+                existSupportCell(posFila, posColumna, dirFila, dirColumna)&&
+                board[posFila][posColumna]==' '){
+                    return new Pair(posFila, posColumna);
+                } else return null;
+            }
+        } else return null;
     }
 }
