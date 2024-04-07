@@ -148,6 +148,13 @@ public class Board {
         return false;
     }
 
+    public boolean isFilled(){
+        for(int i = 0; i < board[0].length; i++)
+            if(board[0][i]==' ') return false; 
+        
+        return true;
+    }
+
     /**
      * Function that calculates the best possible play
      * @param tokenPlayer
@@ -175,6 +182,7 @@ public class Board {
                     DFS_Algorithm(maxCounter, 0, tokenPlayer, i, j, -1, -1, coords);
                     DFS_Algorithm(maxCounter, 0, tokenPlayer, i, j, 1, 1, coords);
                     DFS_Algorithm(maxCounter, 0, tokenPlayer, i, j, 1, -1, coords);
+                    DFS_Algorithm(maxCounter, 0, tokenPlayer, i, j, -1, 1, coords);
                 }
             }
         }   
@@ -192,11 +200,12 @@ public class Board {
                     winnerPair =  DFS_searchForWin(0, tokenPc, i, j, -1, -1);
                     winnerPair =  DFS_searchForWin(0, tokenPc, i, j, 1, 1);
                     winnerPair =  DFS_searchForWin(0, tokenPc, i, j, 1, -1);
+                    winnerPair =  DFS_searchForWin(0, tokenPc, i, j, -1, 1);
                 }
             }
         }
 
-        if(winnerPair!=null){
+        if(winnerPair!=null&&isInBoard(winnerPair.getCoordX(), winnerPair.getCoordY())){
             board[winnerPair.getCoordX()][winnerPair.getCoordY()] = tokenPc;
             return;
         }
@@ -222,7 +231,12 @@ public class Board {
                         options.add(new Pair(i, j));
 
         Random random = new Random();
-        return options.get(random.nextInt(options.size() - 1));
+
+        do {
+            Pair pair = options.get(random.nextInt(options.size()));
+            if(isInBoard(pair.getCoordX(), pair.getCoordY()))
+                return pair;
+        } while (true);
     }
 
     private boolean isInBoard(int posFila, int posColumna){
@@ -237,7 +251,8 @@ public class Board {
             return isInBoard(posFila + 1, posColumna)&&
             board[posFila + 1][posColumna]!=' ';
         } else if(dirFila==-1&&dirColumna==0){ // vertical hacia arriba
-            return isInBoard(posFila - 1, posColumna);
+            return isInBoard(posFila - 1, posColumna)&&
+            board[posFila][posColumna]==' ';
         } else if(dirFila==0&&dirColumna==1){ // horizontal hacia derecha
             return ((isInBoard(posFila + 1, posColumna) && board[posFila + 1][posColumna] != ' ')
             || ((posFila == board.length - 1) && isInBoard(posFila, posColumna) && board[posFila][posColumna] == ' '));
@@ -247,6 +262,9 @@ public class Board {
         } else if(dirFila==1&&dirColumna==1){ // diagonal hacia arriba (izquierda, derecha)
             return (isInBoard(posFila, posColumna + 1)&&board[posFila][posColumna + 1]!=' ')||
             ((posFila==board.length-1)&&board[posFila][posColumna]==' ');
+        } else if(dirFila==-1&&dirColumna==1){
+            return isInBoard(posFila + 1, posColumna)&&
+            board[posFila + 1][posColumna]!=' ';
         }
         return false;
     }

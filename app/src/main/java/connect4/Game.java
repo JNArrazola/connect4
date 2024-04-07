@@ -1,9 +1,12 @@
 package connect4;
 
+import java.util.Scanner;
+
 public class Game {
     private Board board;
     Save save = FileManagement.load();
-    
+    private final Scanner in = new Scanner(System.in);
+
     public void start(){
         gameFound();
         
@@ -78,7 +81,7 @@ public class Game {
     private void PlayerVsPlayer(){
         Player playerOne;
         Player playerTwo;
-        
+
         /**
          * We get info if there is a saved game
           */
@@ -96,11 +99,17 @@ public class Game {
         
         Player winner = null;
         do {
+            
             // Clear screen
             Utilities.clearScreen();
             
             // Print board
             board.printBoard();
+
+            if(board.isFilled()){
+                System.out.println("El tablero se llenó");
+                return;
+            }
 
             // Who's in turn? 
             Player playerToMove = ((playerOne.isIsTurn()) ? playerOne : playerTwo);
@@ -121,6 +130,7 @@ public class Game {
                     winner = playerToMove;
                     break;
                 }
+
             
                 // Swipe turns of players
                 swipeTurns(playerOne, playerTwo);
@@ -130,10 +140,11 @@ public class Game {
         Utilities.clearScreen();
         board.printBoard();
         System.out.println("¡Gana el jugador: " + winner.getName() + "(" + winner.getToken() + ")!");
+        System.out.println("Presiona ENTER para continuar");
         System.out.println();
         System.out.println();
-        save = null;
-        FileManagement.save(save);
+        FileManagement.save(null);
+        in.nextLine();
     }
 
     void PlayerVSPc(){
@@ -157,11 +168,18 @@ public class Game {
         Player winner = null;
         char tokenJugador = playerOne.getToken();
         do {
+            
+            
             // Clear screen
-            // Utilities.clearScreen();
+            Utilities.clearScreen();
 
             // Print board
             board.printBoard();
+
+            if(board.isFilled()){
+                System.out.println("El tablero se llenó");
+                return;
+            }
 
             // Who's in turn?
             Player playerToMove = ((playerOne.isIsTurn()) ? playerOne : playerTwo);
@@ -199,9 +217,11 @@ public class Game {
             Utilities.clearScreen();
             board.printBoard();
             System.out.println("¡Gana el jugador: " + winner.getName() + "(" + winner.getToken() + ")!");
+            System.out.println("Presiona ENTER para continuar");
             System.out.println();
             System.out.println();
             save = null;
             FileManagement.save(save);
+            in.nextLine();
     }
 }
