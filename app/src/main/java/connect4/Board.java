@@ -86,7 +86,7 @@ public class Board {
             if (board[i + 1][column] == ' ') {
                 Utilities.clearScreen();
                 printBoard();
-                //Utilities.sleep(500);
+                Utilities.sleep(500);
                 board[i][column] = ' ';
                 board[i + 1][column] = token;
             } else {
@@ -193,7 +193,7 @@ public class Board {
         Pair winnerPair = null;
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[0].length; j++) {
-                if (board[i][j] == tokenPlayer) {
+                if (board[i][j] == tokenPc) {
                     winnerPair =  DFS_searchForWin(0, tokenPc, i, j, 0, 1);
                     winnerPair =  DFS_searchForWin(0, tokenPc, i, j, 0, -1);
                     winnerPair =  DFS_searchForWin(0, tokenPc, i, j, -1, 0);
@@ -214,8 +214,18 @@ public class Board {
         if(coords[0]==-1||coords[1]==-1)
             selectRandom(coords);
         
+        Utilities.clearScreen();
+        board[0][coords[1]] = tokenPc;
+        printBoard();
+        Utilities.sleep(500);
 
-        board[coords[0]][coords[1]] = tokenPc;
+        for(int i = 1; i <= coords[0]; i++){
+            Utilities.clearScreen();
+            board[i - 1][coords[1]] = ' ';
+            board[i][coords[1]] = tokenPc;
+            printBoard();
+            Utilities.sleep(500);
+        }
     }
 
     private Pair selectRandom(int[] coords){
