@@ -8,8 +8,13 @@ import java.util.Comparator;
  * Class to manage best times of connect 4 game
   */
 public class TimeManagement {
-    private static ArrayList<Register> timesPvP = FileManagement.deserializePvP();
-    private static ArrayList<Register> timesPvPc = FileManagement.deserializePvsPc();
+    private static ArrayList<Register> timesPvP;
+    private static ArrayList<Register> timesPvPc;
+
+    public static void deserializeItems(){
+        timesPvP = FileManagement.deserializePvP();
+        timesPvPc = FileManagement.deserializePvsPc();
+    }
 
     public static void addTimePvP(Register time){
         timesPvP.add(time);

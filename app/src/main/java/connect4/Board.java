@@ -224,7 +224,7 @@ public class Board {
             board[i - 1][coords[1]] = ' ';
             board[i][coords[1]] = tokenPc;
             printBoard();
-            Utilities.sleep(500);
+            Utilities.sleep(150);
         }
     }
     

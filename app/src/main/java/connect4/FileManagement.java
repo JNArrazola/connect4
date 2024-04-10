@@ -80,6 +80,8 @@ public class FileManagement {
             Gson gson = new Gson();
             Type typeList = new TypeToken<ArrayList<Register>>(){}.getType();
             deserializedList = gson.fromJson(reader, typeList);
+            if(deserializedList==null)
+                deserializedList = new ArrayList<>();
         } catch (IOException e) { }
         return deserializedList;
     }
@@ -90,6 +92,8 @@ public class FileManagement {
             Gson gson = new Gson();
             Type typeList = new TypeToken<ArrayList<Register>>(){}.getType();
             deserializedList = gson.fromJson(reader, typeList);
+            if(deserializedList==null)
+                deserializedList = new ArrayList<>();
         } catch (IOException e) { }
         return deserializedList;
     }
