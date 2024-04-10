@@ -4,18 +4,18 @@ import java.io.Serializable;
 
 public class Chronometer implements Serializable {
     private long startTime;
-    private long finalTime;
+    private long totalTime = 0;
 
-    public Chronometer() {
+    public void start(){
         startTime = System.currentTimeMillis();
     }
 
     public void stop() {
-        finalTime = System.currentTimeMillis() - startTime;
+        totalTime+= System.currentTimeMillis() - startTime;
     }
 
     public long getCurrentTime() {
-        return finalTime;
+        return totalTime;
     }
 
     @Override
@@ -34,9 +34,5 @@ public class Chronometer implements Serializable {
 
     public long getStartTime() {
         return startTime;
-    }
-
-    public long getFinalTime() {
-        return finalTime;
     }
 }

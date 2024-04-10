@@ -205,7 +205,7 @@ public class Board {
             }
         }
 
-        if(winnerPair!=null){
+        if(winnerPair!=null&&isInBoard(winnerPair.getCoordX(), winnerPair.getCoordY())){
             coords[0] = winnerPair.getCoordX();
             coords[1] = winnerPair.getCoordY();
         }

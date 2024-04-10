@@ -120,6 +120,8 @@ public class Game {
             save = null;
         }
         
+        chronometer.start();
+
         Player winner = null;
         do {
             
@@ -141,6 +143,7 @@ public class Game {
             int play = Utilities.validateNumber();
 
             if(play==-1){
+                chronometer.stop();
                 FileManagement.save(new Save(playerOne, playerTwo, board, "PlayerVsPlayer", chronometer));
                 System.exit(0);
             }
@@ -195,11 +198,11 @@ public class Game {
             save = null;
         }
 
+        chronometer.start();
+
         Player winner = null;
         char tokenJugador = playerOne.getToken();
         do {
-            
-            
             // Clear screen
             Utilities.clearScreen();
 
@@ -220,7 +223,8 @@ public class Game {
                 int play = Utilities.validateNumber();    
 
                 if(play==-1){
-                    FileManagement.save(new Save(playerOne, playerTwo, board, "PlayerVsPc", null));
+                    chronometer.stop();
+                    FileManagement.save(new Save(playerOne, playerTwo, board, "PlayerVsPc", chronometer));
                     System.exit(0);
                 }
     
