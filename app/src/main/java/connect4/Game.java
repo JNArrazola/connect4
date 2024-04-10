@@ -250,7 +250,7 @@ public class Game {
         } while (true);
             chronometer.stop();
 
-            if(winner.getName()!="PC")
+            if(!(winner.getName().equals("PC")))
                 TimeManagement.addTimePvPc(new Register(winner.getName(), chronometer.toString()));
             
             Utilities.clearScreen();
