@@ -26,8 +26,8 @@ public class Game {
                 case 2: // Jugador contra máquina
                     PlayerVSPc();
                     break;
-                case 3 : // Mejores puntajes
-
+                case 3 :  // Mejores puntajes
+                    showBestScores();
                     break;
                 default:
                     break;
@@ -56,6 +56,27 @@ public class Game {
         }
     }
 
+    private void showBestScores(){
+        int opt;
+        do {
+            System.out.println("¿De qué modalidad deseas ver los mejores puntajes?");
+            System.out.println("1) Jugador contra jugador");
+            System.out.println("2) Jugador contra IA");
+            System.out.println("0) Salir");
+            opt = Utilities.validateNumber();
+            switch (opt) {
+                case 1: // JcJ
+                    TimeManagement.printLearderboardPvP();
+                    break;
+                case 2: // JcIA
+
+                    break;
+                default:
+                    break;
+            }
+        } while (opt!=0);
+    }
+
     private Player createPlayer(int numPlayer){
         System.out.println("Ingresa el nombre del jugador: ");
         String nombre = Utilities.validateString();
@@ -81,7 +102,7 @@ public class Game {
     private void PlayerVsPlayer(){
         Player playerOne;
         Player playerTwo;
-
+        Chronometer chronometer;
         /**
          * We get info if there is a saved game
           */
@@ -89,23 +110,24 @@ public class Game {
             playerOne = createPlayer(1);
             playerTwo = createPlayer(2);
             board = new Board();
+            chronometer = new Chronometer();
             board.resetBoard();
         } else {
             playerOne = save.getPlayerOne();
             playerTwo = save.getPlayerTwo();
             board = save.getBoard();
+            chronometer = save.getChronometer();
+            save = null;
         }
-        
         
         Player winner = null;
         do {
             
             // Clear screen
             Utilities.clearScreen();
-            
             // Print board
             board.printBoard();
-
+            
             if(board.isFilled()){
                 System.out.println("El tablero se llenó");
                 return;
@@ -119,7 +141,7 @@ public class Game {
             int play = Utilities.validateNumber();
 
             if(play==-1){
-                FileManagement.save(new Save(playerOne, playerTwo, board, "PlayerVsPlayer"));
+                FileManagement.save(new Save(playerOne, playerTwo, board, "PlayerVsPlayer", chronometer));
                 System.exit(0);
             }
 
@@ -136,10 +158,13 @@ public class Game {
                 swipeTurns(playerOne, playerTwo);
             } 
         } while (true);
+        chronometer.stop();
+        TimeManagement.addTimePvP(new Register(winner.getName(), chronometer.toString()));
 
         Utilities.clearScreen();
         board.printBoard();
         System.out.println("¡Gana el jugador: " + winner.getName() + "(" + winner.getToken() + ")!");
+        System.out.println("Tiempo: " + chronometer.toString());
         System.out.println("Presiona ENTER para continuar");
         System.out.println();
         System.out.println();
@@ -150,7 +175,6 @@ public class Game {
     void PlayerVSPc(){
         Player playerOne;
         Player playerTwo; 
-
         /**
          * We get info if there is a saved game
           */
@@ -163,6 +187,7 @@ public class Game {
             playerOne = save.getPlayerOne();
             playerTwo = save.getPlayerTwo();
             board = save.getBoard();
+            save = null;
         }
 
         Player winner = null;
@@ -190,7 +215,7 @@ public class Game {
                 int play = Utilities.validateNumber();    
 
                 if(play==-1){
-                    FileManagement.save(new Save(playerOne, playerTwo, board, "PlayerVsPc"));
+                    FileManagement.save(new Save(playerOne, playerTwo, board, "PlayerVsPc", null));
                     System.exit(0);
                 }
     

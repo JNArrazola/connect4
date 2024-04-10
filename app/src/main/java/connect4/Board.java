@@ -86,7 +86,7 @@ public class Board {
             if (board[i + 1][column] == ' ') {
                 Utilities.clearScreen();
                 printBoard();
-                Utilities.sleep(500);
+                //Utilities.sleep(500);
                 board[i][column] = ' ';
                 board[i + 1][column] = token;
             } else {

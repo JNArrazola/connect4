@@ -5,6 +5,10 @@ import java.io.FileWriter;
 import java.io.FileReader;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import java.util.ArrayList;
+import com.google.gson.reflect.TypeToken;
+import java.io.IOException;
+import java.lang.reflect.Type;
 
 public class FileManagement {
     private final static String appDataStr = new File("").getAbsolutePath() + "/appData";
@@ -49,5 +53,44 @@ public class FileManagement {
             e.printStackTrace();
             return null; 
         }
+    }
+
+    /**
+     * Serialize PvP games
+      */
+    public static void serializePvP(ArrayList<Register> scores) {
+        try (FileWriter writer = new FileWriter(scoresPvP + "/times.json")) {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            gson.toJson(scores, writer);
+        } catch (Exception e) {
+        }
+    }
+
+    public static void serializePlayerVsPc(ArrayList<Register> scores) {
+        try (FileWriter writer = new FileWriter(scoresPvPc + "/times.json")) {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            gson.toJson(scores, writer);
+        } catch (Exception e) {
+        }
+    }
+
+    public static ArrayList<Register> deserializePvP() {
+        ArrayList<Register> deserializedList = new ArrayList<>();
+        try (FileReader reader = new FileReader(scoresPvP + "/times.json")) {
+            Gson gson = new Gson();
+            Type typeList = new TypeToken<ArrayList<Register>>(){}.getType();
+            deserializedList = gson.fromJson(reader, typeList);
+        } catch (IOException e) { }
+        return deserializedList;
+    }
+    
+    public static ArrayList<Register> deserializePvsPc() {
+        ArrayList<Register> deserializedList = new ArrayList<>();
+        try (FileReader reader = new FileReader(scoresPvPc + "/times.json")) {
+            Gson gson = new Gson();
+            Type typeList = new TypeToken<ArrayList<Register>>(){}.getType();
+            deserializedList = gson.fromJson(reader, typeList);
+        } catch (IOException e) { }
+        return deserializedList;
     }
 }

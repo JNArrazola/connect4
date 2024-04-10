@@ -7,12 +7,14 @@ public class Save implements Serializable {
     private final Player playerTwo;
     private final Board board;
     private final String gamemode;
+    private final Chronometer chronometer;
 
-    Save(Player playerOne, Player playerTwo, Board board, String gamemode){
+    Save(Player playerOne, Player playerTwo, Board board, String gamemode, Chronometer chronometer){
         this.playerOne = playerOne;
         this.playerTwo = playerTwo;
         this.board = board;
         this.gamemode = gamemode;
+        this.chronometer = chronometer;
     }
 
     public Board getBoard() {
@@ -29,5 +31,9 @@ public class Save implements Serializable {
 
     public String getGamemode() {
         return gamemode;
+    }
+
+    public Chronometer getChronometer() {
+        return chronometer;
     }
 }
