@@ -86,7 +86,7 @@ public class Board {
             if (board[i + 1][column] == ' ') {
                 Utilities.clearScreen();
                 printBoard();
-                //Utilities.sleep(500);
+                Utilities.sleep(150);
                 board[i][column] = ' ';
                 board[i + 1][column] = token;
             } else {
@@ -194,20 +194,20 @@ public class Board {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[0].length; j++) {
                 if (board[i][j] == tokenPc) {
-                    winnerPair =  DFS_searchForWin(0, tokenPc, i, j, 0, 1);
-                    winnerPair =  DFS_searchForWin(0, tokenPc, i, j, 0, -1);
-                    winnerPair =  DFS_searchForWin(0, tokenPc, i, j, -1, 0);
-                    winnerPair =  DFS_searchForWin(0, tokenPc, i, j, -1, -1);
-                    winnerPair =  DFS_searchForWin(0, tokenPc, i, j, 1, 1);
-                    winnerPair =  DFS_searchForWin(0, tokenPc, i, j, 1, -1);
-                    winnerPair =  DFS_searchForWin(0, tokenPc, i, j, -1, 1);
+                    winnerPair = ((winnerPair!=null) ? aux(winnerPair) : DFS_searchForWin(0, tokenPc, i, j, 0, 1));
+                    winnerPair = ((winnerPair!=null) ? aux(winnerPair) : DFS_searchForWin(0, tokenPc, i, j, 0, -1));
+                    winnerPair = ((winnerPair!=null) ? aux(winnerPair) : DFS_searchForWin(0, tokenPc, i, j, -1, 0));
+                    winnerPair = ((winnerPair!=null) ? aux(winnerPair) : DFS_searchForWin(0, tokenPc, i, j, -1, -1));
+                    winnerPair = ((winnerPair!=null) ? aux(winnerPair) : DFS_searchForWin(0, tokenPc, i, j, 1, 1));
+                    winnerPair = ((winnerPair!=null) ? aux(winnerPair) : DFS_searchForWin(0, tokenPc, i, j, 1, -1));
+                    winnerPair = ((winnerPair!=null) ? aux(winnerPair) : DFS_searchForWin(0, tokenPc, i, j, -1, 1));
                 }
             }
         }
 
-        if(winnerPair!=null&&isInBoard(winnerPair.getCoordX(), winnerPair.getCoordY())){
-            board[winnerPair.getCoordX()][winnerPair.getCoordY()] = tokenPc;
-            return;
+        if(winnerPair!=null){
+            coords[0] = winnerPair.getCoordX();
+            coords[1] = winnerPair.getCoordY();
         }
 
         // didn't find any play
@@ -217,7 +217,7 @@ public class Board {
         Utilities.clearScreen();
         board[0][coords[1]] = tokenPc;
         printBoard();
-        Utilities.sleep(500);
+        Utilities.sleep(150);
 
         for(int i = 1; i <= coords[0]; i++){
             Utilities.clearScreen();
@@ -226,6 +226,15 @@ public class Board {
             printBoard();
             Utilities.sleep(500);
         }
+    }
+    
+    /**
+     * Just a support function to make DFS_searchForWin work because
+     *  it needs to return a value in the recursive function
+     * @param pair
+      */
+    private Pair aux(Pair pair){
+        return pair;
     }
 
     private Pair selectRandom(int[] coords){

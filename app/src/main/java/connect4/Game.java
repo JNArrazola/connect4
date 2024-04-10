@@ -69,7 +69,7 @@ public class Game {
                     TimeManagement.printLearderboardPvP();
                     break;
                 case 2: // JcIA
-
+                    TimeManagement.printLeaderboardPvPc();
                     break;
                 default:
                     break;
@@ -175,6 +175,8 @@ public class Game {
     void PlayerVSPc(){
         Player playerOne;
         Player playerTwo; 
+        Chronometer chronometer;
+
         /**
          * We get info if there is a saved game
           */
@@ -183,10 +185,13 @@ public class Game {
             playerTwo = new Player("PC", 'O', false, true);
             board = new Board();
             board.resetBoard();
+            chronometer = new Chronometer();
+            board.resetBoard();
         } else {
             playerOne = save.getPlayerOne();
             playerTwo = save.getPlayerTwo();
             board = save.getBoard();
+            chronometer = save.getChronometer();
             save = null;
         }
 
@@ -239,9 +244,15 @@ public class Game {
             }
             
         } while (true);
+            chronometer.stop();
+
+            if(winner.getName()!="PC")
+                TimeManagement.addTimePvPc(new Register(winner.getName(), chronometer.toString()));
+            
             Utilities.clearScreen();
             board.printBoard();
             System.out.println("¡Gana el jugador: " + winner.getName() + "(" + winner.getToken() + ")!");
+            System.out.println("Tiempo: " + chronometer.toString());
             System.out.println("Presiona ENTER para continuar");
             System.out.println();
             System.out.println();

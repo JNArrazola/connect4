@@ -41,5 +41,23 @@ public class TimeManagement {
         }
     }
 
+    public static void printLeaderboardPvPc(){
+        if(timesPvPc.isEmpty())
+            System.out.println("No hay tiempos registrados");
 
+        Collections.sort(timesPvPc, new Comparator<Register>() {
+            @Override
+            public int compare(Register r1, Register r2) {
+                return r1.getTime().compareTo(r2.getTime());
+            }
+        });
+        
+        short ctr = 1;
+        for(Register s : timesPvPc){
+            if(ctr<5)
+                System.out.println("=== #" + (ctr++) + ": \n" + s.toString());
+            else 
+                System.out.println(s.toString());
+        }
+    }
 }
